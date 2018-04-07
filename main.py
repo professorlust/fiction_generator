@@ -98,6 +98,7 @@ class Generator:
                           trainable=False)(inputs)
             x = Bidirectional(LSTM(600, dropout=0.2, recurrent_dropout=0.1, return_sequences=True))(x)
             x = LSTM(600, dropout=0.2, recurrent_dropout=0.1)(x)
+            # 可以选择把上面两行注释掉，选择下面这行，简化模型，加快训练的速度
             # x = Bidirectional(LSTM(600, dropout=0.2, recurrent_dropout=0.1))(x)
             x = Dense(len(self.tokenizer.word_index) + 1)(x)
             predictions = Activation('softmax')(x)
