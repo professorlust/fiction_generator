@@ -4,13 +4,13 @@
 
 ![Packagist](https://img.shields.io/packagist/l/doctrine/orm.svg) ![PRsWelcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg) ![PythonVersion](https://img.shields.io/pypi/pyversions/Django.svg)
 
-## Dependences
+## Dependencies
 
 * Tensorflow 1.5
 * Jieba 0.39
 * Python 3.6
 * Pre-trained word vectors
-  * 下载预训练的中文词向量 [wiki.zh.vec](https://github.com/facebookresearch/fastText/blob/master/pretrained-vectors.md) 到根目录
+  * 在[这里](https://github.com/facebookresearch/fastText/blob/master/pretrained-vectors.md)下载预训练的中文词向量 [wiki.zh.vec](https://s3-us-west-1.amazonaws.com/fasttext-vectors/wiki.zh.vec) 到根目录
 
 ## Usage
 

@@ -35,7 +35,7 @@ def read_dataset(maxlen=40, step=3):
     text = ''  # 直接拼接的所有语聊内容
     for file in files:
         if not os.path.isdir(file):
-            text += open(os.path.join(path, file), 'r').read().strip()
+            text += open(os.path.join(path, file), 'r', encoding="utf-8").read().strip()
 
     text_words = jieba.lcut(text)  # 将原语聊转为words
     print('total words:', len(text_words))
