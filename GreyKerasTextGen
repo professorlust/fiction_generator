@@ -1,0 +1,240 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "name": "Untitled9.ipynb",
+      "version": "0.3.2",
+      "provenance": [],
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "accelerator": "GPU"
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/professorlust/fiction_generator/blob/master/GreyKerasTextGen\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "metadata": {
+        "id": "MOW_-mIrkRFv",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "cell_type": "code",
+      "source": [
+        "from google.colab import auth\n",
+        "auth.authenticate_user()"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "id": "x69vDhkQkauL",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 71
+        },
+        "outputId": "8dbe1100-71e4-42c5-8480-2905474e2165"
+      },
+      "cell_type": "code",
+      "source": [
+        "!gsutil cp -p gs://\"gsling-western/ZaneGreyCollection2pt1.txt\"  /tmp/greytrain1.txt"
+      ],
+      "execution_count": 2,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "Copying gs://gsling-western/ZaneGreyCollection2pt1.txt...\n",
+            "/ [1 files][  1.8 MiB/  1.8 MiB]                                                \n",
+            "Operation completed over 1 objects/1.8 MiB.                                      \n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    },
+    {
+      "metadata": {
+        "id": "YKzI8Y_LkTUo",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 412
+        },
+        "outputId": "71fd848b-3a6c-426f-cea2-ca874ee55bcb"
+      },
+      "cell_type": "code",
+      "source": [
+        "import string\n",
+        " \n",
+        "# load doc into memory\n",
+        "def load_doc(filename):\n",
+        "\t# open the file as read only\n",
+        "\tfile = open(filename, 'r')\n",
+        "\t# read all text\n",
+        "\ttext = file.read()\n",
+        "\t# close the file\n",
+        "\tfile.close()\n",
+        "\treturn text\n",
+        " \n",
+        "# turn a doc into clean tokens\n",
+        "def clean_doc(doc):\n",
+        "\t# replace '--' with a space ' '\n",
+        "\tdoc = doc.replace('--', ' ')\n",
+        "\t# split into tokens by white space\n",
+        "\ttokens = doc.split()\n",
+        "\t# remove punctuation from each token\n",
+        "\ttable = str.maketrans('', '', string.punctuation)\n",
+        "\ttokens = [w.translate(table) for w in tokens]\n",
+        "\t# remove remaining tokens that are not alphabetic\n",
+        "\ttokens = [word for word in tokens if word.isalpha()]\n",
+        "\t# make lower case\n",
+        "\ttokens = [word.lower() for word in tokens]\n",
+        "\treturn tokens\n",
+        " \n",
+        "# save tokens to file, one dialog per line\n",
+        "def save_doc(lines, filename):\n",
+        "\tdata = '\\n'.join(lines)\n",
+        "\tfile = open(filename, 'w')\n",
+        "\tfile.write(data)\n",
+        "\tfile.close()\n",
+        " \n",
+        "# load document\n",
+        "in_filename = '/tmp/greytrain1.txt'\n",
+        "doc = load_doc(in_filename)\n",
+        "print(doc[:200])\n",
+        " \n",
+        "# clean document\n",
+        "tokens = clean_doc(doc)\n",
+        "print(tokens[:200])\n",
+        "print('Total Tokens: %d' % len(tokens))\n",
+        "print('Unique Tokens: %d' % len(set(tokens)))\n",
+        " \n",
+        "# organize into sequences of tokens\n",
+        "length = 50 + 1\n",
+        "sequences = list()\n",
+        "for i in range(length, len(tokens)):\n",
+        "\t# select sequence of tokens\n",
+        "\tseq = tokens[i-length:i]\n",
+        "\t# convert into a line\n",
+        "\tline = ' '.join(seq)\n",
+        "\t# store\n",
+        "\tsequences.append(line)\n",
+        "print('Total Sequences: %d' % len(sequences))\n",
+        " \n",
+        "# save sequences to file\n",
+        "out_filename = '/tmp/greytrain1.txt_sequences.txt'\n",
+        "save_doc(sequences, out_filename)"
+      ],
+      "execution_count": 3,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "﻿Table of Contents\n",
+            "\n",
+            "A Collection of Zane Grey Vol. II\n",
+            "\n",
+            "\n",
+            "\n",
+            "* * *\n",
+            "\n",
+            "\n",
+            "\n",
+            "\n",
+            "\n",
+            "1\n",
+            "\n",
+            "\n",
+            "Joan Randle reined in her horse on the crest of the cedar ridge, and \n",
+            "with remorse and dread beginning to knock at her heart she\n",
+            "['of', 'contents', 'a', 'collection', 'of', 'zane', 'grey', 'vol', 'ii', 'joan', 'randle', 'reined', 'in', 'her', 'horse', 'on', 'the', 'crest', 'of', 'the', 'cedar', 'ridge', 'and', 'with', 'remorse', 'and', 'dread', 'beginning', 'to', 'knock', 'at', 'her', 'heart', 'she', 'gazed', 'before', 'her', 'at', 'the', 'wild', 'and', 'looming', 'mountain', 'range', 'jim', 'wasnt', 'fooling', 'me', 'she', 'said', 'he', 'meant', 'it', 'hes', 'going', 'straight', 'for', 'the', 'border', 'oh', 'why', 'did', 'i', 'taunt', 'him', 'it', 'was', 'indeed', 'a', 'wild', 'place', 'that', 'southern', 'border', 'of', 'idaho', 'and', 'that', 'year', 'was', 'to', 'see', 'the', 'ushering', 'in', 'of', 'the', 'wildest', 'time', 'probably', 'ever', 'known', 'in', 'the', 'west', 'the', 'rush', 'for', 'gold', 'had', 'peopled', 'california', 'with', 'a', 'horde', 'of', 'lawless', 'men', 'of', 'every', 'kind', 'and', 'class', 'and', 'the', 'vigilantes', 'and', 'then', 'the', 'rich', 'strikes', 'in', 'idaho', 'had', 'caused', 'a', 'reflux', 'of', 'that', 'dark', 'tide', 'of', 'humanity', 'strange', 'tales', 'of', 'blood', 'and', 'gold', 'drifted', 'into', 'the', 'camps', 'and', 'prospectors', 'and', 'hunters', 'met', 'with', 'many', 'unknown', 'men', 'joan', 'had', 'quarreled', 'with', 'jim', 'cleve', 'and', 'she', 'was', 'bitterly', 'regretting', 'it', 'joan', 'was', 'twenty', 'years', 'old', 'tall', 'strong', 'dark', 'she', 'had', 'been', 'born', 'in', 'missouri', 'where', 'her', 'father', 'had', 'been', 'welltodo', 'and', 'prominent', 'until', 'like', 'many', 'another', 'man', 'of', 'his', 'day', 'he', 'had', 'impeded', 'the', 'passage', 'of']\n",
+            "Total Tokens: 321757\n",
+            "Unique Tokens: 13311\n",
+            "Total Sequences: 321706\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    },
+    {
+      "metadata": {
+        "id": "gX2II-2Ukpzt",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "cell_type": "code",
+      "source": [
+        "from numpy import array\n",
+        "from pickle import dump\n",
+        "from keras.preprocessing.text import Tokenizer\n",
+        "from keras.utils import to_categorical\n",
+        "from keras.models import Sequential\n",
+        "from keras.layers import Dense\n",
+        "from keras.layers import LSTM\n",
+        "from keras.layers import Embedding\n",
+        "\n",
+        "# load doc into memory\n",
+        "def load_doc(filename):\n",
+        "\t# open the file as read only\n",
+        "\tfile = open(filename, 'r')\n",
+        "\t# read all text\n",
+        "\ttext = file.read()\n",
+        "\t# close the file\n",
+        "\tfile.close()\n",
+        "\treturn text\n",
+        "\n",
+        "# load\n",
+        "in_filename = '/tmp/greytrain1.txt_sequences.txt'\n",
+        "doc = load_doc(in_filename)\n",
+        "lines = doc.split('\\n')\n",
+        "\n",
+        "# integer encode sequences of words\n",
+        "tokenizer = Tokenizer()\n",
+        "tokenizer.fit_on_texts(lines)\n",
+        "sequences = tokenizer.texts_to_sequences(lines)\n",
+        "# vocabulary size\n",
+        "vocab_size = len(tokenizer.word_index) + 1\n",
+        "\n",
+        "# separate into input and output\n",
+        "sequences = array(sequences)\n",
+        "X, y = sequences[:,:-1], sequences[:,-1]\n",
+        "y = to_categorical(y, num_classes=vocab_size)\n",
+        "seq_length = X.shape[1]\n",
+        "\n",
+        "# define model\n",
+        "model = Sequential()\n",
+        "model.add(Embedding(vocab_size, 50, input_length=seq_length))\n",
+        "model.add(LSTM(100, return_sequences=True))\n",
+        "model.add(LSTM(100))\n",
+        "model.add(Dense(100, activation='relu'))\n",
+        "model.add(Dense(vocab_size, activation='softmax'))\n",
+        "print(model.summary())\n",
+        "# compile model\n",
+        "model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])\n",
+        "# fit model\n",
+        "model.fit(X, y, batch_size=128, epochs=100)\n",
+        "\n",
+        "# save the model to file\n",
+        "model.save('model.h5')\n",
+        "# save the tokenizer\n",
+        "dump(tokenizer, open('tokenizer.pkl', 'wb'))"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    }
+  ]
+}
